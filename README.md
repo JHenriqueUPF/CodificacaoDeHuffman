@@ -1,11 +1,20 @@
 # CodificacaoDeHuffman
 -------------------------------------------------
-Integrantes do grupo:
-  * João Henrique Menezes de Souza
-  * Eric Mota
+Esse é um trabalho da materia de **Estrutura de Dados 2**, ministraad pelo professor **Leonardo Costella**
+-------------------------------------------------
+## Funcionalidades
 
-# Objetivos
 
-# Algoritimo de Huffman
 
-# ?#?#?#?#?#?#?#?#?#?#?
+## Objetivos
+
+## Contribuindo
+ * João Henrique Menezes de Souza
+ * Eric Mota
+
+
+## Algoritimo de Huffman
+
+## Instalação
+
+## ?#?#?#?#?#?#?#?#?#?#?
