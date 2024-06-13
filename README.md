@@ -8,9 +8,9 @@ Esse é um trabalho da materia de **Estrutura de Dados 2**, ministrada pelo prof
 
 
 ## Objetivos
- * Ler e analisar arquivos de texto Unicode. 
- * Extrair tabela de frequências a partir do arquivo recebido. 
- * Construir árvore de Huffman a partir da tabela de frequências. 
+ * Ler e analisar arquivos de texto Unicode. ✅
+ * Extrair tabela de frequências a partir do arquivo recebido. ✅
+ * Construir árvore de Huffman a partir da tabela de frequências. ✅
  * Gerar tabela de codificação atribuindo códigos binários únicos com base na árvore de Huffman.
  * Exibir a árvore de Huffman e a tabela codificação.
  * Exibir o tamanho do arquivo origina.
