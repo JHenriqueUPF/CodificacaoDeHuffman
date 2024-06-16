@@ -38,6 +38,12 @@ class Node {
             return word;
         }
 
+        char getWordChar() {
+            char a;
+            a = word;
+            return a;
+        }
+
         void setWord(wchar_t wr) {
             word = wr;
         }

@@ -112,40 +112,35 @@ class HuffmanTree {
             return str;
         }
 
-        // Function to export the Huffman tree to a DOT file
-        void exportToDot(const std::string& filename) const {
-            std::ofstream dot(filename);
-            dot << "digraph HuffmanTree {\n";
-            traverseAndGenerateDot(root, dot); 
-            dot << "}\n";
-            dot.close();
+        void traverseAndGenerateDot(Node* node, std::ofstream& dot) {
+            if (!node) return;
+
+            if (node->getLeftChield()) {
+                dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getLeftChield()->getWordChar() << " (" << node->getLeftChield()->getFrequency() << ")\";\n";
+                traverseAndGenerateDot(node->getLeftChield(), dot);
+            }
+            if (node->getRightChield()) {
+                dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getRightChield()->getWordChar() << " (" << node->getRightChield()->getFrequency() << ")\";\n";
+                traverseAndGenerateDot(node->getRightChield(), dot);
+            }
         }
 
-        // Function to draw the Huffman tree using Graphviz (platform-independent)
-        void drawTree(const std::string& dotFilename = "huffman_tree.dot",
-                    const std::string& imageFilename = "../arquivos/huffman_tree.png") const {
-            exportToDot(dotFilename);
-            std::string command = "dot -Tpng " + dotFilename + " -o " + imageFilename;
-            std::system(command.c_str());
+        void export2dot(Node* root, const std::string& filename) {
+            std::ofstream dot(filename);
+            dot << "digraph HuffmanTree {\n";
+
+            traverseAndGenerateDot(root, dot);
+
+            dot << "}\n";
+        }
+        // Função para desenhar a árvore de Huffman usando Graphviz
+        void draw() {
+            export2dot(root, "../arquivos/huffman_tree.dot");
+            std::system("dot -Tpng ../arquivos/huffman_tree.dot -o ../arquivos/huffman_tree.png"); // Windows
+            // std::system("dot -Tx11 huffman_tree.dot"); // Linux
         }
 
     private:
-
-        // Helper function for traversing the tree and generating DOT code
-        void traverseAndGenerateDot(Node *node, std::ofstream& dot) const {
-            if (!node) {
-                return;
-            }
-
-            dot << "\t\"" << node->getWord() << " (" << node->getFrequency() << ")\" -> \""
-                << node->getLeftChield()->getWord() << " (" << node->getLeftChield()->getFrequency() << ")\";\n";
-            traverseAndGenerateDot(node->getLeftChield(), dot);
-
-            dot << "\t\"" << node->getWord() << " (" << node->getFrequency() << ")\" -> \""
-                << node->getRightChield()->getWord() << " (" << node->getRightChield()->getFrequency() << ")\";\n";
-            traverseAndGenerateDot(node->getRightChield(), dot);
-        }
-
         void printHuffmanTree(Node* node) {
             if (node == nullptr) {
                 return;

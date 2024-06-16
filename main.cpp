@@ -18,14 +18,15 @@ int main() {
     
     //ht.createPriorityQueue();
     //ht.printPriorityQueue();
-    ht.buildHuffmanTree(strTxt);
+    //ht.buildHuffmanTree(strTxt);
     //cout << ht.mapToString() << endl;
     //cout << ht.freqToString();
     //ht.createTree();
-    ht.printFreqMap();
-    ht.printHuffmanTable();
+    //ht.printFreqMap();
     //ht.printTree();
     fRead.compressFile(fileName, ht);
+    ht.printHuffmanTable();
+    ht.draw();
 
     std::wcout << L"Tamanho do arquivo original: " << fRead.getNormalFileSize() << L" bytes" << std::endl;
     std::wcout << L"Tamanho do arquivo compactado: " << fRead.getCompressedFileSize() << L" bytes" << std::endl;
