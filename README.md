@@ -13,7 +13,7 @@ Esse é um trabalho da materia de **Estrutura de Dados 2**, ministrada pelo prof
  * Construir árvore de Huffman a partir da tabela de frequências. ✅
  * Gerar tabela de codificação atribuindo códigos binários únicos com base na árvore de Huffman. ✅
  * Exibir a árvore de Huffman e a tabela codificação. ✅
- * Exibir o tamanho do arquivo origina.
+ * Exibir o tamanho do arquivo origina. ✅
  * (Opcional) Salvar arquivo compactado.
  * (Opcional) Descompactar arquivo.
 

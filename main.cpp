@@ -76,7 +76,7 @@ Node* criaArvore(std::priority_queue<Node*, std::vector<Node*>, CompareNodes> fi
     return root;
 }
 
-void encode(Node *root, std::wstring str, std::map<wchar_t, std::wstring> &huffmanCode) {
+void encode(Node *root, std::wstring str, std::unordered_map<wchar_t, std::wstring> &huffmanCode) {
         if (root == nullptr) 
             return;
 
@@ -88,6 +88,15 @@ void encode(Node *root, std::wstring str, std::map<wchar_t, std::wstring> &huffm
         }
 }
 
+std::wstring encodeFile(std::wifstream &file, const std::unordered_map<wchar_t, std::wstring>& huffmanCode) {
+    std::wstring encodedContent = L"";
+    wchar_t c;
+    while (file.get(c)) {
+        encodedContent += huffmanCode.at(c);
+        std::wcout << huffmanCode.at(c) << L" ";
+    }
+    return encodedContent;
+}
 
 //Testes
 // Mostra a tabela de frequencia
@@ -162,7 +171,7 @@ void draw(const Node* root) {
 }
 
 //printa o map dos códigos binarios
-void printHuffmanCode(const std::map<wchar_t, std::wstring>& huffmanCode) {
+void printHuffmanCode(const std::unordered_map<wchar_t, std::wstring>& huffmanCode) {
     for (const auto& pair : huffmanCode) {
         std::wcout << pair.first << L": " << pair.second << std::endl;
     }
@@ -184,15 +193,13 @@ int main() {
 
     std::unordered_map<wchar_t, int> frequencyMap;
     std::priority_queue<Node*, std::vector<Node*>, CompareNodes> filaOrdenada;
-    std::map<wchar_t, std::wstring> huffmanCode;
+    std::unordered_map<wchar_t, std::wstring> huffmanCode; 
     
     //cria a tabela de frequncia
     frequencyMap = createFrequencyMap(file);
-    file.close();
 
     filaOrdenada = createPriorityQueue(frequencyMap);
 
-    
     //printFrequencyMap(frequencyMap);
     //printPriorityQueue(filaOrdenada);
 
@@ -204,6 +211,33 @@ int main() {
 
     encode(raiz, L"", huffmanCode);
     printHuffmanCode(huffmanCode);
+    file.clear();
+    file.seekg(0);
+    std::wstring strcode = encodeFile(file, huffmanCode);
+    std::wcout << strcode << std::endl;
+
+    file.clear();
+    file.seekg(0);
+
+    size_t origFileSizeWchars = 0;
+    wchar_t ch;
+    while (file.get(ch)) {
+        origFileSizeWchars++;
+    }
+    file.close();
+
+    size_t origFileSizeBytes = origFileSizeWchars * sizeof(wchar_t);
+
+    size_t compressedFileSizeBits = strcode.size();
+    size_t compressedFileSizeBytes = (compressedFileSizeBits + 7) / 8;
+
+    double compressionRatio = (1.0 - static_cast<double>(compressedFileSizeBytes) / origFileSizeBytes) * 100.0;
+
+    std::wcout << L"Tamanho do arquivo original: " << origFileSizeBytes << L" bytes" << std::endl;
+    std::wcout << L"Tamanho do arquivo compactado: " << compressedFileSizeBytes << L" bytes" << std::endl;
+    std::wcout << L"Taxa de compressão: " << compressionRatio << L"%" << std::endl;
+
+    file.close();
 
     return 0;
 }
