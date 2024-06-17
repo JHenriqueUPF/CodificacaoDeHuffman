@@ -148,21 +148,11 @@ class HuffmanTree {
             if (!node) return;
 
             if (node->getLeftChield()) {
-                if(node->isSubTree())
-                    dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getLeftChield()->getWordChar() << " (" << node->getLeftChield()->getFrequency() << ")\";\n";
-                if(node->isLeaf()){ 
-                    std::string cod = wstring_to_string(huffmanTable.at(node->getWord()));  
-                    dot << "\"" << node->getWordChar() << node->getFrequency() << "\" [shape=record, label=\"{{" << node->getWordChar() << "|" << node->getFrequency() << "}|{" << cod << "}}\"];\n";
-                }                  
+                dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getLeftChield()->getWordChar() << " (" << node->getLeftChield()->getFrequency() << ")\";\n";
                 traverseAndGenerateDot(node->getLeftChield(), dot);
             }
             if (node->getRightChield()) {
-                if(node->isSubTree())
-                    dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getLeftChield()->getWordChar() << " (" << node->getLeftChield()->getFrequency() << ")\";\n";
-                if(node->isLeaf()){ 
-                    std::string cod = wstring_to_string(huffmanTable.at(node->getWord()));  
-                    dot << "\"" << node->getWordChar() << node->getFrequency() << "\" [shape=record, label=\"{{" << node->getWordChar() << "|" << node->getFrequency() << "}|{" << cod << "}}\"];\n";
-                }                
+                dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getRightChield()->getWordChar() << " (" << node->getRightChield()->getFrequency() << ")\";\n";
                 traverseAndGenerateDot(node->getRightChield(), dot);
             }
         }
@@ -175,7 +165,7 @@ class HuffmanTree {
 
             dot << "}\n";
         }
-        // Função para desenhar a árvore de Huffman usando Graphviz, implementar função para utilizar o comando certo dependendo do SO
+        // Função para desenhar a árvore de Huffman usando Graphviz
         void draw() {
             export2dot(root, "../arquivos/huffman_tree.dot");
             std::system("dot -Tpng ../arquivos/huffman_tree.dot -o ../arquivos/huffman_tree.png"); // Windows
