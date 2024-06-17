@@ -15,7 +15,11 @@ class Node {
             return (!left && !right);
         }
 
-        void setChildren(Node* left, Node* right) {
+        bool isSubTree() {
+            return (left || right);
+        }
+
+        void setChildren(Node* left, Node* right) { //Vegonhoso erro, azar
             this->left = left;
             this->right = right;
         }
@@ -48,7 +52,7 @@ class Node {
             word = wr;
         }
 
-        Node* getLeftChield() {
+        Node* getLeftChield() { //Triste erro de ingles
             return left;
         }
 

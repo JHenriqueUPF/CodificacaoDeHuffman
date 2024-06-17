@@ -4,6 +4,7 @@
 #include <iostream>
 #include <locale>
 #include <codecvt>
+#include <cstdlib> 
 
 
 class HuffmanTree {
@@ -22,13 +23,10 @@ class HuffmanTree {
         std::unordered_map<wchar_t, int> frequencyMap;
         std::unordered_map<wchar_t, std::wstring> huffmanTable;
         std::priority_queue<Node*, std::vector<Node*>, CompareNodes> priorityQueue;
+        std::unordered_map<wchar_t, std::vector<bool>> binariVector;
     
     public:
         HuffmanTree() : root() {}
-
-        Node* getRoot() {
-            return root;
-        }
 
         void createFrequencyMap (std::wstring strFile) { 
             for (wchar_t c : strFile) {
@@ -42,7 +40,7 @@ class HuffmanTree {
             }
         }  
 
-        void createTree() { // mudar, criar uma copia da pq para adulterar dentro do methodo
+        void createTree() { // mudar, criar uma copia da pq para adulterar dentro do methodo <Não mais necessario, retornar como estava>
             std::priority_queue<Node*, std::vector<Node*>, CompareNodes> copy = priorityQueue;
             while (copy.size() != 1) {
                 Node* aux1 = copy.top(); copy.pop();
@@ -58,7 +56,8 @@ class HuffmanTree {
             copy.pop();
         }
 
-        void encode(Node *root, std::wstring str) 
+        //codifica utilizando wchar_t <Propósito de compreensão do código>
+        void createHuffmanTable(Node *root, std::wstring str) 
         {
             if(root == nullptr) {
                 return;
@@ -68,16 +67,49 @@ class HuffmanTree {
                 huffmanTable[root->getWord()] = str;
             }
 
-            encode(root->getLeftChield(), str + L"0");
-	        encode(root->getRightChield(), str + L"1");
+            createHuffmanTable(root->getLeftChield(), str + L"0");
+	        createHuffmanTable(root->getRightChield(), str + L"1");
 
+        }
+
+        //codifica em bits
+        void encode(Node *root, std::vector<bool> str) {
+            if (root == nullptr) {
+                return;
+            }
+
+            if (root->isLeaf()) {
+                binariVector[root->getWord()] = str;
+            }
+
+            if (root->getLeftChield() != nullptr) {
+                std::vector<bool> leftStr = str;
+                leftStr.push_back(false);
+                encode(root->getLeftChield(), leftStr);
+            }
+
+            if (root->getRightChield() != nullptr) {
+                std::vector<bool> rightStr = str;
+                rightStr.push_back(true);
+                encode(root->getRightChield(), rightStr);
+            }
         }
 
         void buildHuffmanTree(std::wstring strTxt) {
             createFrequencyMap(strTxt);
             createPriorityQueue();
             createTree();
-            encode(root, L""); // mudar nome, createHuffmanTable
+            createHuffmanTable(root, L""); // mudar nome, createHuffmanTable
+            std::vector<bool> bv;
+            encode(root, bv);
+        }
+
+        Node* getRoot() {
+            return root;
+        }
+
+        std::unordered_map<wchar_t, std::vector<bool>> getBinaryVector() {
+            return binariVector;
         }
 
         std::unordered_map<wchar_t, std::wstring> getHuffmanTable() {
@@ -87,10 +119,8 @@ class HuffmanTree {
         std::string freqToString() {
             std::string str = "";
             for (const auto& pair : frequencyMap) {
-                str += pair.first; // Adiciona o caractere chave
+                str += pair.first; 
                 str += ":";
-
-                // Convertendo o número inteiro para uma string antes de adicionar a str
                 std::string numS = std::to_string(pair.second);
                 str += numS;
 
@@ -102,9 +132,8 @@ class HuffmanTree {
         std::string mapToString() {
             std::string str = "";
             for (const auto& pair : huffmanTable) {
-                str += pair.first; // Adiciona o caractere chave
+                str += pair.first; 
                 str += ":";
-                                // Converte de std::wstring para std::string utilizando o objeto converter
                 std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
                 str += converter.to_bytes(pair.second);
                 str += " ";
@@ -112,15 +141,28 @@ class HuffmanTree {
             return str;
         }
 
+        //********************
+        // Metodos para exportar para .dot
+        //********************
         void traverseAndGenerateDot(Node* node, std::ofstream& dot) {
             if (!node) return;
 
             if (node->getLeftChield()) {
-                dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getLeftChield()->getWordChar() << " (" << node->getLeftChield()->getFrequency() << ")\";\n";
+                if(node->isSubTree())
+                    dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getLeftChield()->getWordChar() << " (" << node->getLeftChield()->getFrequency() << ")\";\n";
+                if(node->isLeaf()){ 
+                    std::string cod = wstring_to_string(huffmanTable.at(node->getWord()));  
+                    dot << "\"" << node->getWordChar() << node->getFrequency() << "\" [shape=record, label=\"{{" << node->getWordChar() << "|" << node->getFrequency() << "}|{" << cod << "}}\"];\n";
+                }                  
                 traverseAndGenerateDot(node->getLeftChield(), dot);
             }
             if (node->getRightChield()) {
-                dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getRightChield()->getWordChar() << " (" << node->getRightChield()->getFrequency() << ")\";\n";
+                if(node->isSubTree())
+                    dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getLeftChield()->getWordChar() << " (" << node->getLeftChield()->getFrequency() << ")\";\n";
+                if(node->isLeaf()){ 
+                    std::string cod = wstring_to_string(huffmanTable.at(node->getWord()));  
+                    dot << "\"" << node->getWordChar() << node->getFrequency() << "\" [shape=record, label=\"{{" << node->getWordChar() << "|" << node->getFrequency() << "}|{" << cod << "}}\"];\n";
+                }                
                 traverseAndGenerateDot(node->getRightChield(), dot);
             }
         }
@@ -133,7 +175,7 @@ class HuffmanTree {
 
             dot << "}\n";
         }
-        // Função para desenhar a árvore de Huffman usando Graphviz
+        // Função para desenhar a árvore de Huffman usando Graphviz, implementar função para utilizar o comando certo dependendo do SO
         void draw() {
             export2dot(root, "../arquivos/huffman_tree.dot");
             std::system("dot -Tpng ../arquivos/huffman_tree.dot -o ../arquivos/huffman_tree.png"); // Windows
@@ -146,18 +188,29 @@ class HuffmanTree {
                 return;
             }
 
-            // Traverse the left subtree
             printHuffmanTree(node->getLeftChield());
 
-            // Print the current node
             if (node->getWord() != L'+') {
                 std::wcout << node->getWord() << L" -> " << node->getFrequency() << L"\n";
             } else {
                 std::wcout << L"+ -> " << node->getFrequency() << L"\n";
             }
 
-            // Traverse the right subtree
             printHuffmanTree(node->getRightChield());
+        }
+
+        std::string wstring_to_string(const std::wstring& wstr) {
+            // Calcular o tamanho necessário para a string multibyte
+            size_t len = wcstombs(nullptr, wstr.c_str(), 0);
+            if (len == (size_t)-1) {
+                throw std::runtime_error("Erro na conversão de wstring para string");
+            }
+
+            // Alocar espaço para a string multibyte
+            std::vector<char> buf(len + 1);
+            wcstombs(buf.data(), wstr.c_str(), len + 1);
+
+            return std::string(buf.data());
         }
 
         //Funções utilizadas no teste e funções para mostrar no terminal

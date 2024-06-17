@@ -8,22 +8,13 @@ void advertance();
 int main() {
     advertance();
     FileReader fRead;
+    HuffmanTree ht;
+
     string name = getFilename();
     string fileName = "../arquivos/" + name;
 
     wstring strTxt = fRead.readFileToWString(fileName );
 
-    HuffmanTree ht;
-    //ht.createFrequencyMap(strTxt);
-    
-    //ht.createPriorityQueue();
-    //ht.printPriorityQueue();
-    //ht.buildHuffmanTree(strTxt);
-    //cout << ht.mapToString() << endl;
-    //cout << ht.freqToString();
-    //ht.createTree();
-    //ht.printFreqMap();
-    //ht.printTree();
     fRead.compressFile(fileName, ht);
     ht.printHuffmanTable();
     ht.draw();
