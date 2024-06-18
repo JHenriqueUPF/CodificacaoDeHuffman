@@ -42,5 +42,7 @@ void advertance() {
     << endl
     <<"e para a disciplina de Programação Orientada a Objetos, ministrada pelo professor Jaqson Dalbosco"
     << endl
-    << "Trabalho feito por: João Henrique Menezes, e Eric Mota!" << endl << endl << endl << endl;;
+    << "Trabalho feito por: João Henrique Menezes, e Eric Mota!" 
+    << endl 
+    << "Link do Projeto no GitHub: https://github.com/JHenriqueUPF/CodificacaoDeHuffman" << endl << endl << endl;;
 }
