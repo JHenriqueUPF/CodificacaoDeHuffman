@@ -44,5 +44,5 @@ void advertance() {
     << endl
     << "Trabalho feito por: João Henrique Menezes, e Eric Mota!" 
     << endl 
-    << "Link do Projeto no GitHub: https://github.com/JHenriqueUPF/CodificacaoDeHuffman" << endl << endl << endl;;
+    << "Link do Projeto no GitHub: https://github.com/JHenriqueUPF/CodificacaoDeHuffman" << endl << endl << endl;
 }
