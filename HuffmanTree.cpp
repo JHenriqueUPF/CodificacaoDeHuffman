@@ -148,11 +148,11 @@ class HuffmanTree {
             if (!node) return;
 
             if (node->getLeftChield()) {
-                dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getLeftChield()->getWordChar() << " (" << node->getLeftChield()->getFrequency() << ")\";\n";
+                dot << "\t\"" << escapeChar(node->getWordChar()) << " (" << node->getFrequency() << ")\" -> \"" << escapeChar(node->getLeftChield()->getWordChar()) << " (" << node->getLeftChield()->getFrequency() << ")\";\n";
                 traverseAndGenerateDot(node->getLeftChield(), dot);
             }
             if (node->getRightChield()) {
-                dot << "\t\"" << node->getWordChar() << " (" << node->getFrequency() << ")\" -> \"" << node->getRightChield()->getWordChar() << " (" << node->getRightChield()->getFrequency() << ")\";\n";
+                dot << "\t\"" << escapeChar(node->getWordChar()) << " (" << node->getFrequency() << ")\" -> \"" << escapeChar(node->getRightChield()->getWordChar()) << " (" << node->getRightChield()->getFrequency() << ")\";\n";
                 traverseAndGenerateDot(node->getRightChield(), dot);
             }
         }
@@ -171,6 +171,36 @@ class HuffmanTree {
             std::system("dot -Tpng ../arquivos/huffman_tree.dot -o ../arquivos/huffman_tree.png"); // Windows
             // std::system("dot -Tx11 huffman_tree.dot"); // Linux
         }
+
+        // Função para escapar caracteres especiais
+        std::string escapeChar(wchar_t c) {
+            switch (c) {
+                case L'"':  return "\\\"";
+                case L'\\': return "\\\\";
+                case L'{':  return "\\{";
+                case L'}':  return "\\}";
+                case L'<':  return "\\<";
+                case L'>':  return "\\>";
+                case L'|':  return "\\|";
+                case L'[':  return "\\[";
+                case L']':  return "\\]";
+                case L':':  return "\\:";
+                case L';':  return "\\;";
+                case L'\n': return "\\n";
+                case L'\r': return "\\r";
+                case L'\t': return "\\t";
+                default:
+                    // Caracteres normais no DOT
+                    if (std::iswprint(c)) {
+                        std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+                        return converter.to_bytes(std::wstring(1, c));
+                    } else {
+                        // Caracteres que não são imprimíveis, como não sei o que fazer com eles, retorno vazio!
+                        return "";
+                    }
+            }
+        }
+
 
     private:
         void printHuffmanTree(Node* node) {

@@ -21,7 +21,7 @@ class FileReader {
 
         // Metodo para retornar o tamanho do normalFile em bytes
         std::size_t getNormalFileSize() const {
-            return normalFile.size() * sizeof(wchar_t);
+            return normalFile.size();
         }
         
         // Metodo para calcular a taxa de compressão em %
