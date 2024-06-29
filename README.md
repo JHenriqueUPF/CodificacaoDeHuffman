@@ -1,6 +1,9 @@
 # CodificacaoDeHuffman
 -------------------------------------------------
 Esse é um trabalho da materia de **Estrutura de Dados 2** ministrada pelo professor **Leonardo Costella**, e **Programação Orientada a Objetos** ministrada pelo professor **Jaqson Dalbosco**, este projeto tem como o objetivo o aprendizado sobre estruturas de dados, POO, e compressão de arquivos, de nenhuma maneira foi feito para o uso sério, e não é recomendado utilizar o programa para compactar arquivos!
+
+![image](https://github.com/JHenriqueUPF/CodificacaoDeHuffman/assets/170052628/bcdda603-0597-4019-b5ff-09db5d8f044e)
+
 -------------------------------------------------
 ## Instalação Windows
  * Baixar o arquivo, Abra o Prompt de Comando ou PowerShell.
